@@ -6,15 +6,17 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,60 +28,71 @@ public class Main extends Application {
 
     /**
      *
-     * @param primaryStage :
-     * @throws Exception :
+     * @param primaryStage : stage
+     * @throws Exception : exception
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
         //primaryStage.getIcons().add(new Image("jetbrains.png"));
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         //Setting the stage
-        Group root = new Group(menu(primaryStage));
+
+        //Group root = new Group(menu(), setBarChart());
         primaryStage.setTitle("TP 10 Java PFICOT");
-        primaryStage.setScene(new Scene(root, 1200, 800));
+        //primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
     }
 
     /**
      *
-     * @param stage : stage
      * @return : full set menubar
      */
-    public MenuBar menu(Stage stage){
-        Menu matiereMenu = new Menu("Matières");
+    /*public HBox menu(){
+        ComboBox matiereCombo = new ComboBox();
         for(MATIERE matiere : MATIERE.values()) {
-            matiereMenu.getItems().add(new MenuItem(String.valueOf(matiere.getNom())));
+            matiereCombo.getItems().add(matiere.getNom());
         }
-        Menu classeMenu = new Menu("Classes");
-        for(NIVEAU niveau : NIVEAU.values()) {
-            Menu menuNiveau = new Menu(niveau.getAbreviation());
-            classeMenu.getItems().add(menuNiveau);
-            for(LETTRE lettre : LETTRE.values()) {
-                MenuItem itemLettre = new MenuItem(lettre.toString());
-                menuNiveau.getItems().add(itemLettre);
-            }
-            classeMenu.getItems().add(new SeparatorMenuItem());
-        }
-        MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().add(matiereMenu);
-        menuBar.getMenus().add(classeMenu);
-        menuBar.prefWidthProperty().bind(stage.widthProperty());
 
-        return menuBar;
-    }
+        ComboBox classeCombo = new ComboBox();
+        for(NIVEAU niveau : NIVEAU.values()) {
+            classeCombo.getItems().add(niveau.getAbreviation());
+        }
+
+        HBox hBox = new HBox(matiereCombo, classeCombo);
+
+        return hBox;
+    }*/
+
 
     /**
      *
-     * @param stage : stage
+     * @return :
      */
-    /*public void setBarChart(Stage stage) {
+    /*public VBox setBarChart(List<Classe> listeClasse) {
 
         //Define x axis
         CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("X Axis");
 
-        xAxis.setCategories();
         //Define y axis
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Y Axis");
 
+        BarChart barChart = new BarChart(xAxis, yAxis);
+
+        XYChart.Series dataSeries1 = new XYChart.Series();
+        dataSeries1.setName("XD");
+
+        for()
+        dataSeries1.getData().add(new XYChart.Data("Desktop", 10));
+        dataSeries1.getData().add(new XYChart.Data("Phone", 15.2));
+        dataSeries1.getData().add(new XYChart.Data("Tablet", 13.3));
+
+        barChart.getData().add(dataSeries1);
+
+        VBox vBox = new VBox(barChart);
+
+        return vBox;
     }*/
 
     /**
@@ -103,7 +116,6 @@ public class Main extends Application {
             }
         }
     }
-
 
     /**
      *
@@ -158,29 +170,29 @@ public class Main extends Application {
 
     /**
      *
-     * @param eleve : eleve
+     * @param listeClasse :
      */
-    public static void moyenneParEleve(Eleve eleve) {
-        for(Bulletin bulletin : eleve.getBulletins()) {
-            System.out.println(bulletin.getMatiere().getNom());
-            for(Double note : bulletin.getNotes()) {
-                System.out.println(note);
-            }
-        }
-    }
-
-    /**
-     *
-     * @param classe : classe
-     */
-    public static void moyenneParClasse(Classe classe) {
-        for (Eleve eleve : classe.getListEleves()) {
-            System.out.println(eleve.getNom());
+    public static void notesClasse(List<Classe> listeClasse) {
+        System.out.println("notes par classe");
+        //Classe
+        for(Classe classe : listeClasse) {
+            System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
             //Matiere
-            for(Bulletin bulletin : eleve.getBulletins()) {
-                System.out.println(bulletin.getMatiere().getNom());
-                for(Double note : bulletin.getNotes()) {
-                    System.out.println(note);
+            for(MATIERE matiere : MATIERE.values()) {
+                System.out.println(matiere.getNom());
+                //Eleve
+                List<Double> tmp = new ArrayList<>();
+                for(Eleve eleve : classe.getListEleves()) {
+                    //Bulletin
+                    for(Bulletin bulletin : eleve.getBulletins()) {
+                        if(matiere != bulletin.getMatiere()) {
+                            continue;
+                        }
+                        for(Double note : bulletin.getNotes()) {
+                            System.out.println(note);
+                            tmp.add(note);
+                        }
+                    }
                 }
             }
         }
@@ -188,23 +200,57 @@ public class Main extends Application {
 
     /**
      *
-     * @param niveau : niveau choisi
-     * @param listeClasse :liste de classe
+     * @param listeClasse :
      */
-    public static void moyenneParNiveau(NIVEAU niveau, List<Classe> listeClasse) {
+    public static void notesEleve(List<Classe> listeClasse) {
+        System.out.println("notes par eleve");
         //Classe
         for(Classe classe : listeClasse) {
-            //Si niveau = getNiveau()
-            if (niveau == classe.getNiveau()) {
-                System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre());
-                //Eleve
-                for (Eleve eleve : classe.getListEleves()) {
-                    System.out.println(eleve.getNom());
-                    //Matiere
-                    for (Bulletin bulletin : eleve.getBulletins()) {
-                        System.out.println(bulletin.getMatiere().getNom());
-                        for (Double note : bulletin.getNotes()) {
-                            System.out.println(note);
+            //Eleve
+            for(Eleve eleve : classe.getListEleves()) {
+                System.out.println(eleve.getNom());
+                //Matiere
+                for(Bulletin bulletin : eleve.getBulletins()) {
+                    if(bulletin.getNotes().isEmpty()) {
+                        continue;
+                    }
+                    System.out.println(bulletin.getMatiere().getNom());
+                    for(Double note : bulletin.getNotes()) {
+                        System.out.println(note);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param listeClasse :
+     */
+    public static void notesNiveau(List<Classe> listeClasse) {
+        System.out.println("notes par classe");
+        for (NIVEAU niveau : NIVEAU.values()) {
+            System.out.println(niveau.getAbreviation());
+            //Classe
+            for(Classe classe : listeClasse) {
+                if(niveau != classe.getNiveau()) {
+                    continue;
+                }
+                //Matiere
+                for(MATIERE matiere : MATIERE.values()) {
+                    System.out.println(matiere.getNom());
+                    //Eleve
+                    List<Double> tmp = new ArrayList<>();
+                    for(Eleve eleve : classe.getListEleves()) {
+                        //Bulletin
+                        for(Bulletin bulletin : eleve.getBulletins()) {
+                            if(matiere != bulletin.getMatiere()) {
+                                continue;
+                            }
+                            for(Double note : bulletin.getNotes()) {
+                                System.out.println(note);
+                                tmp.add(note);
+                            }
                         }
                     }
                 }
@@ -217,7 +263,7 @@ public class Main extends Application {
      * @param values :
      * @return :
      */
-    public static double Mediane(List<Double> values) {
+    public static double mediane(List<Double> values) {
         Collections.sort(values);
 
         if (values.size() % 2 == 1)
@@ -235,37 +281,33 @@ public class Main extends Application {
         Double min;
         Double max;
         Double avg= 0.0;
-        Double med= 0.0;
+        Double med;
         DecimalFormat df = new DecimalFormat("0.00");
         //Classe
         for(Classe classe : listeClasse) {
             System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
+            HashMap<MATIERE, List<Double>> stats = new HashMap<>();
             //Eleve
             for(Eleve eleve : classe.getListEleves()) {
-                System.out.println(eleve.getNom());
                 //Matiere
                 for(Bulletin bulletin : eleve.getBulletins()) {
                     if(bulletin.getNotes().isEmpty()) {
                         continue;
                     }
-                    System.out.println(bulletin.getMatiere().getNom());
+                    List<Double> dblList = new ArrayList<>();
                     for(Double note : bulletin.getNotes()) {
                         avg += note;
+                        dblList.add(note);
                     }
+                    stats.put(bulletin.getMatiere(), dblList);
 
-
-                    min = Collections.min(bulletin.getNotes());
-                    max = Collections.max(bulletin.getNotes());
-                    avg /= Math.round(bulletin.getMatiere().getNbrEpreuve());
-                    med = Mediane(bulletin.getNotes());
-
-                    System.out.println("Maximum: " + max);
-                    System.out.println("Minimum: " + min);
-                    System.out.println("Moyenne: " + df.format(avg));
-                    System.out.println("Mediane: " + med);
+                    avg /= bulletin.getMatiere().getNbrEpreuve();
                 }
             }
-
+            //System.out.println("Maximum: " + Collections.max(stats.values()));
+            //System.out.println("Minimum: " + Collections.min(dblList));
+            //System.out.println("Moyenne: " + df.format(avg));
+            //System.out.println("Mediane: " + df.format(mediane(dblList)));
         }
     }
 
@@ -275,16 +317,18 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         //JavaFX
-        launch(args);
+        //launch(args);
 
         //Liste de classes
         List<Classe> listeClasse = new  ArrayList<>();
 
         createClasses(listeClasse);
         interroSurprise(listeClasse);
-        conseilDeClasse(listeClasse);
-        //moyenneParEleve(eleve);
-        //moyenneParClasse(classe);
+        //conseilDeClasse(listeClasse);
+
+        //notesClasse(listeClasse);
+        //notesEleve(listeClasse);
+        notesNiveau(listeClasse);
         //moyenneParNiveau(NIVEAU.CINQUIEME, listeClasse);
         //classesStats(listeClasse); //TODO à fixer
         System.out.println("End");
