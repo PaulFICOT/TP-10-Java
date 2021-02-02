@@ -1,0 +1,42 @@
+
+V	java:S106˜"9Replace this use of System.out or System.err by a logger.(¬ÛÑş8ÍóÜ€ö.
+U
+java:S1854î"7Remove this useless assignment to local variable "med".(àˆ¯“8ïŒ»ûõ.
+Y	java:S125"<This block of commented-out lines of code should be removed.(ğÂÓÄ8ÍóÜ€ö.
+V	java:S106ê"9Replace this use of System.out or System.err by a logger.(üÌÑ8ÍóÜ€ö.
+V	java:S106Ï"9Replace this use of System.out or System.err by a logger.(¬ÛÑş8ÍóÜ€ö.
+[	java:S106û"9Replace this use of System.out or System.err by a logger.(Øë«ğşÿÿÿÿ8ÍóÜ€ö.
+[	java:S106¢"9Replace this use of System.out or System.err by a logger.(Å¨©°üÿÿÿÿ8ÍóÜ€ö.
+[	java:S106ò"9Replace this use of System.out or System.err by a logger.(è¿´‰üÿÿÿÿ8ÍóÜ€ö.
+G
+java:S5411|"*Use the primitive boolean expression here.(…–ñÎ8ÍóÜ€ö.
+P
+java:S1135¡"2Complete the task associated to this TODO comment.(ÅÊ””8ÍóÜ€ö.
+[	java:S106–"9Replace this use of System.out or System.err by a logger.(Øë«ğşÿÿÿÿ8ÍóÜ€ö.
+V	java:S106Ê"9Replace this use of System.out or System.err by a logger.(ïÓ ‹8ÍóÜ€ö.
+D
+java:S2185ƒ"&Remove this silly call to "Math.round"(åÔ¹ñ8ÍóÜ€ö.
+[	java:S106Ç"9Replace this use of System.out or System.err by a logger.(ÖòÁ…şÿÿÿÿ8ÍóÜ€ö.
+[	java:S106‰"9Replace this use of System.out or System.err by a logger.(ŞóÃ¢øÿÿÿÿ8ÍóÜ€ö.
+Z
+java:S1128"8Remove this unused import 'javafx.scene.chart.BarChart'.(÷‡¬Äøÿÿÿÿ8äÉÃ€ö.
+[	java:S106"9Replace this use of System.out or System.err by a logger.(è¿´‰üÿÿÿÿ8ÍóÜ€ö.
+V	java:S106§"9Replace this use of System.out or System.err by a logger.(¬ÛÑş8ÍóÜ€ö.
+[	java:S106µ"9Replace this use of System.out or System.err by a logger.(Øë«ğşÿÿÿÿ8ÍóÜ€ö.
+V	java:S106·"9Replace this use of System.out or System.err by a logger.(¬ÛÑş8ÍóÜ€ö.
+V	java:S106ˆ"9Replace this use of System.out or System.err by a logger.(™‹×›8ƒà¯ùõ.
+V	java:S106"9Replace this use of System.out or System.err by a logger.(ËèÒÏ8ÍóÜ€ö.
+[	java:S106¥"9Replace this use of System.out or System.err by a logger.(Øë«ğşÿÿÿÿ8ÍóÜ€ö.
+V	java:S106†"9Replace this use of System.out or System.err by a logger.(ËÜ8ïŒ»ûõ.
+[	java:S106‡"9Replace this use of System.out or System.err by a logger.(ÏïÂèúÿÿÿÿ8ÅÛøõ.
+V	java:S106õ"9Replace this use of System.out or System.err by a logger.(ïÓ ‹8ÍóÜ€ö.
+U	java:S106Z"9Replace this use of System.out or System.err by a logger.(ğº–‹8ÍóÜ€ö.
+t
+java:S3776p"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(òÂøúÿÿÿÿ8ÍóÜ€ö.
+[	java:S106Í"9Replace this use of System.out or System.err by a logger.(Øë«ğşÿÿÿÿ8ÍóÜ€ö.
+Z	java:S106q"9Replace this use of System.out or System.err by a logger.(©Ş‹ıÿÿÿÿ8ÍóÜ€ö.
+k	java:S100Ü"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢í¾‡8ÍóÜ€ö.
+X	java:S125""<This block of commented-out lines of code should be removed.(„Š„¬8ÄØıúõ.
+V	java:S106²"9Replace this use of System.out or System.err by a logger.(ïÓ ‹8ÍóÜ€ö.
+V	java:S106“"9Replace this use of System.out or System.err by a logger.(ïÓ ‹8ÍóÜ€ö.
+]	java:S125K"<This block of commented-out lines of code should be removed.(ƒü÷¶şÿÿÿÿ8­’„‚ö.

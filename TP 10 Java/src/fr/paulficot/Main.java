@@ -2,9 +2,14 @@ package fr.paulficot;
 
 import com.github.javafaker.Faker;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Stage;
 
 import java.text.DecimalFormat;
@@ -25,12 +30,57 @@ public class Main extends Application {
      * @throws Exception :
      */
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+    public void start(Stage primaryStage) throws Exception {
+        //primaryStage.getIcons().add(new Image("jetbrains.png"));
+        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        //Setting the stage
+        Group root = new Group(menu(primaryStage));
+        primaryStage.setTitle("TP 10 Java PFICOT");
+        primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
     }
+
+    /**
+     *
+     * @param stage : stage
+     * @return : full set menubar
+     */
+    public MenuBar menu(Stage stage){
+        Menu matiereMenu = new Menu("Matières");
+        for(MATIERE matiere : MATIERE.values()) {
+            matiereMenu.getItems().add(new MenuItem(String.valueOf(matiere.getNom())));
+        }
+        Menu classeMenu = new Menu("Classes");
+        for(NIVEAU niveau : NIVEAU.values()) {
+            Menu menuNiveau = new Menu(niveau.getAbreviation());
+            classeMenu.getItems().add(menuNiveau);
+            for(LETTRE lettre : LETTRE.values()) {
+                MenuItem itemLettre = new MenuItem(lettre.toString());
+                menuNiveau.getItems().add(itemLettre);
+            }
+            classeMenu.getItems().add(new SeparatorMenuItem());
+        }
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().add(matiereMenu);
+        menuBar.getMenus().add(classeMenu);
+        menuBar.prefWidthProperty().bind(stage.widthProperty());
+
+        return menuBar;
+    }
+
+    /**
+     *
+     * @param stage : stage
+     */
+    /*public void setBarChart(Stage stage) {
+
+        //Define x axis
+        CategoryAxis xAxis = new CategoryAxis();
+
+        xAxis.setCategories();
+        //Define y axis
+
+    }*/
 
     /**
      *
@@ -218,7 +268,6 @@ public class Main extends Application {
 
         }
     }
-
 
     /**
      *
