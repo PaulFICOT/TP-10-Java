@@ -4,43 +4,30 @@ import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Eleve {
 
-    Faker faker = new Faker();
+    Faker faker = new Faker(Locale.FRENCH);
 
     private String nom;
     private List<Bulletin> bulletins;
     private final List<MATIERE> options;
 
     public void genererOptions(){
-        switch (faker.number().numberBetween(0, 3)) {
-            case 0 -> {
-                options.remove(MATIERE.ADVENG);
-                options.remove(MATIERE.LAT);
-                options.remove(MATIERE.GRE);
-            }
-            case 1 -> {
-                options.add(MATIERE.ADVENG);
-                options.remove(MATIERE.LAT);
-                options.remove(MATIERE.GRE);
-            }
-            case 2 -> {
+        switch (faker.number().numberBetween(0, 5)) {
+            case 1 -> options.add(MATIERE.ADVENG);
+            case 2 -> options.add(MATIERE.LAT);
+            case 3 -> options.add(MATIERE.GRE);
+            case 4 -> {
                 options.add(MATIERE.ADVENG);
                 options.add(MATIERE.LAT);
-                options.remove(MATIERE.GRE);
             }
-            case 3 -> {
+            case 5 -> {
                 options.add(MATIERE.ADVENG);
                 options.add(MATIERE.GRE);
-                options.remove(MATIERE.LAT);
             }
-            default -> {
-                options.add(null);
-                options.remove(MATIERE.ADVENG);
-                options.remove(MATIERE.LAT);
-                options.remove(MATIERE.GRE);
-            }
+            default -> options.add(null);
         }
     }
 
