@@ -29,6 +29,12 @@ public class Bulletin {
     }
 
     public void addNotes(double note) {
+        if(note > 20) {
+            note = 20;
+        }
+        if(note < 0) {
+            note = 0;
+        }
         this.notes.add(note);
     }
 }

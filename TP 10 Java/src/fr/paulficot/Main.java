@@ -1,17 +1,14 @@
 package fr.paulficot;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import javax.swing.event.ChangeListener;
-import java.sql.SQLException;
 
 /**
  *
@@ -26,8 +23,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-
             TabPane tabPane = new TabPane();
             tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -41,14 +36,12 @@ public class Main extends Application {
             tabPane.getTabs().add(tab3);
             tabPane.getTabs().add(tab4);
 
-            VBox vBox = new VBox(tabPane);
-
             tab1.setContent(tab1());
             tab2.setContent(tab2());
             tab3.setContent(tab3());
             tab4.setContent(tab4());
 
-            Scene scene = new Scene(vBox);
+            Scene scene = new Scene(tabPane);
             primaryStage.setTitle("TP 10 Java PFICOT");
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -56,8 +49,6 @@ public class Main extends Application {
        catch(Exception e)    {
             e.printStackTrace();
         }
-        //primaryStage.setScene(root, 1200, 800));
-        //primaryStage.show();
     }
 
     public static Group tab1() {
@@ -66,12 +57,18 @@ public class Main extends Application {
 
         ComboBox tab1Combo1 = new ComboBox();
         for(MATIERE matiere : MATIERE.values()) {
-            tab1Combo1.getItems().add(matiere.getNom());
+            tab1Combo1.getItems().add(matiere);
         }
         ComboBox tab1Combo2 = new ComboBox();
         for(NIVEAU niveau : NIVEAU.values()) {
-            tab1Combo2.getItems().add(niveau.getAbreviation());
+            tab1Combo2.getItems().add(niveau);
         }
+
+        tab1Combo1.getSelectionModel().selectFirst();
+        tab1Combo2.getSelectionModel().selectFirst();
+
+        //tab1Combo1.valueProperty().addListener(changeListener);
+        //tab1Combo2.valueProperty().addListener(changeListener);
 
         sousGrid.add(tab1Combo1, 0, 0, 1, 1);
         sousGrid.add(tab1Combo2, 1, 0, 1, 1);
@@ -88,19 +85,7 @@ public class Main extends Application {
 
         BarChart barChart = new BarChart(xAxis, yAxis);
 
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("Moyenne | matière | Niveau");
-
-        for(NIVEAU niveau : NIVEAU.values()) {
-            for(LETTRE lettre : LETTRE.values()) {
-                dataSeries1.getData().add(new XYChart.Data(niveau.getAbreviation() + " " + lettre, Moteur.getInstance().moyenne(niveau, lettre)));
-                }
-            }
-        //dataSeries1.getData().add(new XYChart.Data("Desktop", 10));
-        //dataSeries1.getData().add(new XYChart.Data("Phone", 15.2));
-        //dataSeries1.getData().add(new XYChart.Data("Tablet", 13.3));
-
-        barChart.getData().add(dataSeries1);
+        updateCharts(barChart);
 
         mainGrid.add(barChart, 0, 1, 1, 1);
 
@@ -124,6 +109,10 @@ public class Main extends Application {
         for(MATIERE matiere : MATIERE.values()) {
             tab2Combo3.getItems().add(matiere.getNbrEpreuve());
         }
+
+        tab2Combo1.getSelectionModel().selectFirst();
+        tab2Combo2.getSelectionModel().selectFirst();
+        tab2Combo3.getSelectionModel().selectFirst();
 
         sousGrid.add(tab2Combo1, 0, 0, 1, 1);
         sousGrid.add(tab2Combo2, 1, 0, 1, 1);
@@ -252,6 +241,27 @@ public class Main extends Application {
         mainGrid.add(lineChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
+    }
+
+    public static void updateCharts(BarChart barChart) {
+        XYChart.Series dataSeries1 = new XYChart.Series();
+        dataSeries1.setName("Moyenne | matière | Niveau");
+
+        MATIERE matiere = MATIERE.MATHS;
+        for(NIVEAU niveau : NIVEAU.values()) {
+            for(LETTRE lettre : LETTRE.values()) {
+                dataSeries1.getData().add(new XYChart.Data(niveau + " " + lettre, Moteur.moyenne(niveau, lettre, matiere)));
+            }
+            break;
+        }
+
+        barChart.getData().addAll(dataSeries1);
+
+        ChangeListener changeListener =  new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+            }
+        };
     }
 
     /**

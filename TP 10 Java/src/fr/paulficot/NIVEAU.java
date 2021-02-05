@@ -8,6 +8,11 @@ public enum NIVEAU {
 
     public final String abreviation;
 
+    @Override
+    public String toString() {
+        return this.getAbreviation();
+    }
+
     NIVEAU(String abreviation) {
         this.abreviation = abreviation;
     }

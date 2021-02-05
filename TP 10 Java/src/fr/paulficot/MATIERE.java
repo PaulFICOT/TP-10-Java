@@ -37,6 +37,11 @@ public enum MATIERE {
         this.debut = debut;
     }
 
+    @Override
+    public String toString() {
+        return this.getNom();
+    }
+
     public Boolean getOpt() {
         return isOpt;
     }

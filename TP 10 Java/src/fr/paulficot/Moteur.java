@@ -1,7 +1,11 @@
 package fr.paulficot;
 
-import com.github.javafaker.Faker;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -11,10 +15,10 @@ public class Moteur {
 
     private static final int MAX_ELEVE = 20;
 
-    private List<MATIERE> listeMatiere;
-    private List<LETTRE> listeLettre;
-    private List<NIVEAU> listeNiveau;
-    private List<Classe> listeClasse;
+    private static List<MATIERE> listeMatiere;
+    private static List<LETTRE> listeLettre;
+    private static List<NIVEAU> listeNiveau;
+    private static List<Classe> listeClasse;
 
     public Moteur() {
         this.listeMatiere = new ArrayList<>();
@@ -56,7 +60,7 @@ public class Moteur {
 
     public void interroSurprise() {
         System.out.println("interroSurprise");
-        Faker faker = new Faker();
+        Random random = new Random();
         //Classe
         for (Classe classe : listeClasse) {
             //Eleve
@@ -69,8 +73,8 @@ public class Moteur {
                     Bulletin bulletin = new Bulletin(matiere);
                     //Nombre d'épreuves
                     for (int i = 0; i < matiere.getNbrEpreuve(); i++) {
-                        double note = faker.number().randomDouble(2, 0, 20) * 2;
-                        note = Math.round(note);
+                        double note = random.nextGaussian()*3+12;
+                        note = Math.round(note*2);
                         note /= 2;
                         bulletin.addNotes(note);
                     }
@@ -99,43 +103,39 @@ public class Moteur {
         }
     }
 
-    //public HashMap<MATIERE, Double> moyenne(NIVEAU niveau, LETTRE lettre) {
-    public Double moyenne(NIVEAU niveau, LETTRE lettre) {
-        //HashMap<MATIERE, Double> hashMap = new HashMap<MATIERE, Double>();
+    public static Double moyenne(NIVEAU niveau, LETTRE lettre, MATIERE matiere) {
         double tmp = 0.0;
+        int cpt = 0;
         //Classe
         for (Classe classe : getListeClasse()) {
             //Verifie le niveau et la lettre
-            if (niveau != classe.getNiveau() && lettre != classe.getLettre()) {
+            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
                 continue;
             }
-            //Matiere
-            for (MATIERE matiere : MATIERE.values()) {
-                //Eleve
-                for (Eleve eleve : classe.getListEleves()) {
-                    //Bulletin
-                    for (Bulletin bulletin : eleve.getBulletins()) {
-                        if (matiere != bulletin.getMatiere()) {
-                            continue;
-                        }
-                        for (Double note : bulletin.getNotes()) {
-                            tmp += tmp;
-                        }
+            //Eleve
+            for (Eleve eleve : classe.getListEleves()) {
+                //Bulletin
+                for (Bulletin bulletin : eleve.getBulletins()) {
+                    if (matiere != bulletin.getMatiere()) {
+                        continue;
+                    }
+                    for (Double note : bulletin.getNotes()) {
+                        tmp = tmp+note;
+                        cpt++;
                     }
                 }
-                //hashMap.put(matiere, tmp);
             }
         }
-        return tmp;
+        return tmp/cpt;
     }
 
-    public int occurence(Classe classe) {
+    public static int occurence(Classe classe) {
         int occurence= 1;
 
         return occurence;
     }
 
-    public void notesClasses(List<Classe> listeClasse) {
+    public static void notesClasses(List<Classe> listeClasse) {
         System.out.println("notes par classe");
         //Classe
         for(Classe classe : listeClasse) {
@@ -161,7 +161,7 @@ public class Moteur {
         }
     }
 
-    public void notesEleves(List<Classe> listeClasse) {
+    public static void notesEleves(List<Classe> listeClasse) {
         System.out.println("notes par eleve");
         //Classe
         for(Classe classe : listeClasse) {
@@ -182,7 +182,7 @@ public class Moteur {
         }
     }
 
-    public void notesNiveau(List<Classe> listeClasse) {
+    public static void notesNiveau(List<Classe> listeClasse) {
         System.out.println("notes par classe");
         for (NIVEAU niveau : NIVEAU.values()) {
             System.out.println(niveau.getAbreviation());
@@ -213,7 +213,7 @@ public class Moteur {
         }
     }
 
-    public double mediane(List<Double> values) {
+    public static double mediane(List<Double> values) {
         Collections.sort(values);
 
         if (values.size() % 2 == 1)
@@ -226,7 +226,7 @@ public class Moteur {
         }
     }
 
-    public void classesStats(List<Classe> listeClasse) {
+    public static void classesStats(List<Classe> listeClasse) {
         System.out.println("classesStats");
         Double min;
         Double max;
@@ -261,39 +261,89 @@ public class Moteur {
         }
     }
 
-    public List<MATIERE> getListeMatiere() {
+    public static List<MATIERE> getListeMatiere() {
         return listeMatiere;
     }
 
-    public void setListeMatiere(List<MATIERE> listeMatiere) {
-        this.listeMatiere = listeMatiere;
+    public static void setListeMatiere(List<MATIERE> listeMatiere) {
+        Moteur.listeMatiere = listeMatiere;
     }
 
-    public List<LETTRE> getListeLettre() {
+    public static List<LETTRE> getListeLettre() {
         return listeLettre;
     }
 
-    public void setListeLettre(List<LETTRE> listeLettre) {
-        this.listeLettre = listeLettre;
+    public static void setListeLettre(List<LETTRE> listeLettre) {
+        Moteur.listeLettre = listeLettre;
     }
 
-    public List<NIVEAU> getListeNiveau() {
+    public static List<NIVEAU> getListeNiveau() {
         return listeNiveau;
     }
 
-    public void setListeNiveau(List<NIVEAU> listeNiveau) {
-        this.listeNiveau = listeNiveau;
+    public static void setListeNiveau(List<NIVEAU> listeNiveau) {
+        Moteur.listeNiveau = listeNiveau;
     }
 
-    public List<Classe> getListeClasse() {
+    public static List<Classe> getListeClasse() {
         return listeClasse;
     }
 
-    public void setListeClasse(List<Classe> listeClasse) {
-        this.listeClasse = listeClasse;
+    public static void setListeClasse(List<Classe> listeClasse) {
+        Moteur.listeClasse = listeClasse;
     }
 
     public void json() {
+        System.out.println("JSON");
+
+        try {
+            File file = new File("tp10.json");
+            if(file.createNewFile()) {
+                System.out.println("File created :" + file.getName());
+            } else {
+                System.out.println("File already exists");
+            }
+
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+
+            Writer writer = Files.newBufferedWriter(Paths.get("user.json"));
+
+            /*for(Classe classe : listeClasse) {
+                gson.toJson(classe, writer);
+            }*/
+
+            writer.close();
+
+
+
+            /*for (Classe classe : listeClasse) {
+                gson.toJson(classe.getNiveau().getAbreviation() + classe.getLettre(), new FileWriter("tp10.json"));
+                //System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
+                //Eleve
+                for (Eleve eleve : classe.getListEleves()) {
+                    gson.toJson(eleve.getNom(), new FileWriter("tp10.json"));
+                    //System.out.println(eleve.getNom());
+                    //Matiere
+                    for (Bulletin bulletin : eleve.getBulletins()) {
+                        gson.toJson(bulletin.getMatiere().getNom(), new FileWriter("tp10.json"));
+                        //System.out.println(bulletin.getMatiere().getNom());
+                        for (Double note : bulletin.getNotes()) {
+                            gson.toJson(note, new FileWriter("tp10.json"));
+                            //System.out.println(note);
+                        }
+                    }
+                }
+            }*/
+
+
+
+        } catch (IOException ioException) {
+            System.out.println("An error occured");
+            ioException.printStackTrace();
+        }
+
 
     }
 
@@ -301,6 +351,7 @@ public class Moteur {
         fillLists();
         createClasses();
         interroSurprise();
-        conseilDeClasse();
+        //conseilDeClasse();
+        json();
     }
 }
