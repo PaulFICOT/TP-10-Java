@@ -13,3 +13,5 @@ P
  src/fr/paulficot/Controller.java,6/a/6a856116a26b146eba0618ad45d9661354db688b
 L
 src/fr/paulficot/sample.fxml,2/7/2758f45fba60b28bf6eb39da8612228b82c62eb7
+L
+src/fr/paulficot/Classe.java,1/c/1ca6752ee4c14419fd7279c568a76ed7950a12d8

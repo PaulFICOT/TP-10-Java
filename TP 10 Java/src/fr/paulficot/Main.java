@@ -2,7 +2,6 @@ package fr.paulficot;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
@@ -52,6 +51,7 @@ public class Main extends Application {
     }
 
     public static Group tab1() {
+        Graphs.getInstance();
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
@@ -64,35 +64,27 @@ public class Main extends Application {
             tab1Combo2.getItems().add(niveau);
         }
 
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateBarChart((MATIERE) tab1Combo1.getValue(), (NIVEAU) tab1Combo2.getValue());
+
         tab1Combo1.getSelectionModel().selectFirst();
         tab1Combo2.getSelectionModel().selectFirst();
 
-        //tab1Combo1.valueProperty().addListener(changeListener);
-        //tab1Combo2.valueProperty().addListener(changeListener);
+        tab1Combo1.valueProperty().addListener(changeListener);
+        tab1Combo2.valueProperty().addListener(changeListener);
 
         sousGrid.add(tab1Combo1, 0, 0, 1, 1);
         sousGrid.add(tab1Combo2, 1, 0, 1, 1);
 
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
-        //Define x axis
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Classes");
-
-        //Define y axis
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Moyenne");
-
-        BarChart barChart = new BarChart(xAxis, yAxis);
-
-        updateCharts(barChart);
-
+        BarChart barChart = Graphs.setupBarChart();
         mainGrid.add(barChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
     }
 
     public static Group tab2() {
+        Graphs.getInstance();
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
@@ -104,46 +96,29 @@ public class Main extends Application {
             tab2Combo1.getItems().add(niveau);
         }
         for(MATIERE matiere : MATIERE.values()) {
-            tab2Combo2.getItems().add(matiere.getNom());
+            tab2Combo2.getItems().add(matiere);
         }
-        for(MATIERE matiere : MATIERE.values()) {
-            tab2Combo3.getItems().add(matiere.getNbrEpreuve());
+        for(int epreuve= 1; epreuve < 4; epreuve++) {
+            tab2Combo3.getItems().add(epreuve);
         }
+
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateLineChart((NIVEAU) tab2Combo1.getValue(), (MATIERE) tab2Combo2.getValue(), (int) tab2Combo3.getValue());
 
         tab2Combo1.getSelectionModel().selectFirst();
         tab2Combo2.getSelectionModel().selectFirst();
         tab2Combo3.getSelectionModel().selectFirst();
+
+        tab2Combo1.valueProperty().addListener(changeListener);
+        tab2Combo2.valueProperty().addListener(changeListener);
+        tab2Combo3.valueProperty().addListener(changeListener);
 
         sousGrid.add(tab2Combo1, 0, 0, 1, 1);
         sousGrid.add(tab2Combo2, 1, 0, 1, 1);
         sousGrid.add(tab2Combo3, 2, 0, 1, 1);
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("x axis");
+        LineChart lineChart = Graphs.setupLineChart();
 
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("y axis");
-
-        LineChart lineChart = new LineChart(xAxis, yAxis);
-
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("XD");
-
-
-        int x=0;
-        for(Classe classe : Moteur.getInstance().getListeClasse()) {
-            x+=5;
-            dataSeries1.getData().add(new XYChart.Data(x, Moteur.getInstance().occurence(classe)));
-        }
-        dataSeries1.getData().add(new XYChart.Data( 1, 567));
-        dataSeries1.getData().add(new XYChart.Data( 5, 612));
-        dataSeries1.getData().add(new XYChart.Data(10, 800));
-        dataSeries1.getData().add(new XYChart.Data(20, 780));
-        dataSeries1.getData().add(new XYChart.Data(40, 810));
-        dataSeries1.getData().add(new XYChart.Data(80, 850));
-
-        lineChart.getData().add(dataSeries1);
         mainGrid.add(lineChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
@@ -241,27 +216,6 @@ public class Main extends Application {
         mainGrid.add(lineChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
-    }
-
-    public static void updateCharts(BarChart barChart) {
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("Moyenne | matière | Niveau");
-
-        MATIERE matiere = MATIERE.MATHS;
-        for(NIVEAU niveau : NIVEAU.values()) {
-            for(LETTRE lettre : LETTRE.values()) {
-                dataSeries1.getData().add(new XYChart.Data(niveau + " " + lettre, Moteur.moyenne(niveau, lettre, matiere)));
-            }
-            break;
-        }
-
-        barChart.getData().addAll(dataSeries1);
-
-        ChangeListener changeListener =  new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-            }
-        };
     }
 
     /**

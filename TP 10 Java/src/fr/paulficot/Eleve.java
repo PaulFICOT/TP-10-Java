@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class Eleve {
 
-    Faker faker = new Faker(Locale.FRENCH);
+    private transient Faker faker = new Faker(Locale.FRENCH);
 
     private String nom;
     private List<Bulletin> bulletins;

@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -103,38 +101,6 @@ public class Moteur {
         }
     }
 
-    public static Double moyenne(NIVEAU niveau, LETTRE lettre, MATIERE matiere) {
-        double tmp = 0.0;
-        int cpt = 0;
-        //Classe
-        for (Classe classe : getListeClasse()) {
-            //Verifie le niveau et la lettre
-            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
-                continue;
-            }
-            //Eleve
-            for (Eleve eleve : classe.getListEleves()) {
-                //Bulletin
-                for (Bulletin bulletin : eleve.getBulletins()) {
-                    if (matiere != bulletin.getMatiere()) {
-                        continue;
-                    }
-                    for (Double note : bulletin.getNotes()) {
-                        tmp = tmp+note;
-                        cpt++;
-                    }
-                }
-            }
-        }
-        return tmp/cpt;
-    }
-
-    public static int occurence(Classe classe) {
-        int occurence= 1;
-
-        return occurence;
-    }
-
     public static void notesClasses(List<Classe> listeClasse) {
         System.out.println("notes par classe");
         //Classe
@@ -213,6 +179,28 @@ public class Moteur {
         }
     }
 
+    public static List<Double> getNotesEpreuves(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
+        List<Double> listNotes = new ArrayList<>();
+
+        for (Classe classe : getListeClasse()) {
+            if(classe.getNiveau() != niveau && classe.getLettre() != lettre) {
+                continue;
+            }
+            for(Eleve eleve : classe.getListEleves()) {
+                for(Bulletin bulletin : eleve.getBulletins()) {
+                    if(bulletin.getMatiere() != matiere) {
+                        continue;
+                    }
+                    for(int i=0; i<=bulletin.getNotes().size();i++) {
+
+                    }
+                }
+            }
+        }
+
+        return listNotes;
+    }
+
     public static double mediane(List<Double> values) {
         Collections.sort(values);
 
@@ -261,6 +249,41 @@ public class Moteur {
         }
     }
 
+    public static void variance() {
+
+    }
+
+    public static Double tab1Moyenne(NIVEAU niveau, LETTRE lettre, MATIERE matiere) {
+        double tmp = 0.0;
+        int cpt = 0;
+        //Classe
+        for (Classe classe : getListeClasse()) {
+            //Verifie le niveau et la lettre
+            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
+                continue;
+            }
+            //Eleve
+            for (Eleve eleve : classe.getListEleves()) {
+                //Bulletin
+                for (Bulletin bulletin : eleve.getBulletins()) {
+                    if (matiere != bulletin.getMatiere()) {
+                        continue;
+                    }
+                    for (Double note : bulletin.getNotes()) {
+                        tmp = tmp+note;
+                        cpt++;
+                    }
+                }
+            }
+        }
+        return tmp/cpt;
+    }
+
+    public static Double tab2Gaussian(NIVEAU niveau, MATIERE matiere, int epreuve) {
+
+        return null;
+    }
+
     public static List<MATIERE> getListeMatiere() {
         return listeMatiere;
     }
@@ -295,56 +318,15 @@ public class Moteur {
 
     public void json() {
         System.out.println("JSON");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try {
-            File file = new File("tp10.json");
-            if(file.createNewFile()) {
-                System.out.println("File created :" + file.getName());
-            } else {
-                System.out.println("File already exists");
-            }
-
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
-
-            Writer writer = Files.newBufferedWriter(Paths.get("user.json"));
-
-            /*for(Classe classe : listeClasse) {
-                gson.toJson(classe, writer);
-            }*/
-
-            writer.close();
-
-
-
-            /*for (Classe classe : listeClasse) {
-                gson.toJson(classe.getNiveau().getAbreviation() + classe.getLettre(), new FileWriter("tp10.json"));
-                //System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
-                //Eleve
-                for (Eleve eleve : classe.getListEleves()) {
-                    gson.toJson(eleve.getNom(), new FileWriter("tp10.json"));
-                    //System.out.println(eleve.getNom());
-                    //Matiere
-                    for (Bulletin bulletin : eleve.getBulletins()) {
-                        gson.toJson(bulletin.getMatiere().getNom(), new FileWriter("tp10.json"));
-                        //System.out.println(bulletin.getMatiere().getNom());
-                        for (Double note : bulletin.getNotes()) {
-                            gson.toJson(note, new FileWriter("tp10.json"));
-                            //System.out.println(note);
-                        }
-                    }
-                }
-            }*/
-
-
-
+            FileWriter filewriter = new FileWriter("data.json");
+            gson.toJson(listeClasse, filewriter);
+            filewriter.close();
         } catch (IOException ioException) {
-            System.out.println("An error occured");
             ioException.printStackTrace();
         }
-
-
     }
 
     public void generer() {
