@@ -1,6 +1,7 @@
 package fr.paulficot;
 
 /**
+ * Enum that contains all topics
  *
  */
 public enum MATIERE {
@@ -24,11 +25,12 @@ public enum MATIERE {
     private final NIVEAU debut;
 
     /**
+     * MATIERE constructor
      *
-     * @param nom : Nom de la matière
-     * @param isOpt : La matière est-elle optionnelle
-     * @param debut :
-     * @param nbrEpreuve :
+     * @param nom : Name of the topic
+     * @param isOpt : Optional topic
+     * @param debut : Grade you begin this topic
+     * @param nbrEpreuve : How many time you'll take this topic while a test
      */
     MATIERE(String nom, Boolean isOpt, int nbrEpreuve, NIVEAU debut) {
         this.nom = nom;
@@ -37,6 +39,11 @@ public enum MATIERE {
         this.debut = debut;
     }
 
+    /**
+     * Override the toString()
+     *
+     * @return name of the topic
+     */
     @Override
     public String toString() {
         return this.getNom();

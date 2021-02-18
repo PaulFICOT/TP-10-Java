@@ -1,22 +1,47 @@
 package fr.paulficot;
 
 import javafx.scene.chart.*;
+import javafx.scene.control.ListView;
 
+/**
+ * Setup and refresh every JavaFX
+ * datas in charts
+ *
+ * @author Paul FICOT
+ * @version 1.0
+ */
 public class Graphs {
 
     private static Graphs graphs_instance = null;
 
+    private static ListView listView;
     private static BarChart barChart;
     private static LineChart lineChart;
 
+    /**
+     * Graph object constructor
+     */
     private Graphs() {
     }
 
+    /**
+     * Singleton of graph
+     * Create a Graph and return it
+     * if already exists return it
+     *
+     * @return Graph instance
+     */
     public static Graphs getInstance() {
         if (graphs_instance == null)
             graphs_instance = new Graphs();
 
         return graphs_instance;
+    }
+
+    public static ListView setupListView() {
+        listView = new ListView();
+
+        return listView;
     }
 
     public static BarChart setupBarChart() {

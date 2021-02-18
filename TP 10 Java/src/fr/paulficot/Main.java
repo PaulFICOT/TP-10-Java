@@ -10,11 +10,16 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
+ * Main class
+ * contains JavaFX frame
  *
+ * @author Paul FICOT
+ * @version 1.0
  */
 public class Main extends Application {
 
     /**
+     * JavaFX Start method
      *
      * @param primaryStage : stage
      * @throws Exception : exception
@@ -25,16 +30,19 @@ public class Main extends Application {
             TabPane tabPane = new TabPane();
             tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
+            Tab tab0 = new Tab("0");
             Tab tab1 = new Tab("1");
             Tab tab2 = new Tab("2");
             Tab tab3 = new Tab("3");
             Tab tab4 = new Tab("4");
 
+            tabPane.getTabs().add(tab0);
             tabPane.getTabs().add(tab1);
             tabPane.getTabs().add(tab2);
             tabPane.getTabs().add(tab3);
             tabPane.getTabs().add(tab4);
 
+            tab0.setContent(tab0());
             tab1.setContent(tab1());
             tab2.setContent(tab2());
             tab3.setContent(tab3());
@@ -50,6 +58,33 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Tab 0 of the JavaFX frame
+     * contains list of stats per student
+     *
+     * @return JavaFX group for tab0
+     */
+    public static Group tab0() {
+        Graphs.getInstance();
+        GridPane mainGrid = new GridPane();
+
+        ListView tab0List = Graphs.setupListView();
+
+        mainGrid.add(tab0List, 0, 1, 1, 1);
+
+        for(String line : Moteur.classesStats(Moteur.getListeClasse())) {
+            tab0List.getItems().add(line);
+        }
+
+        return new Group(mainGrid);
+    }
+
+    /**
+     * Tab 1 of the JavaFX frame
+     * Barchar average per class per topic
+     *
+     * @return JavaFX group for tab1
+     */
     public static Group tab1() {
         Graphs.getInstance();
         GridPane mainGrid = new GridPane();
@@ -83,6 +118,12 @@ public class Main extends Application {
         return new Group(mainGrid);
     }
 
+    /**
+     * Tab 2 of the JavaFX frame
+     * Gaussian curve of the results for a test
+     *
+     * @return JavaFX group for tab2
+     */
     public static Group tab2() {
         Graphs.getInstance();
         GridPane mainGrid = new GridPane();
@@ -124,6 +165,13 @@ public class Main extends Application {
         return new Group(mainGrid);
     }
 
+    /**
+     * Tab 3 of the JavaFX frame
+     * Gaussian curve results of a
+     * test per class per topic
+     *
+     * @return JavaFX group for tab3
+     */
     public static Group tab3() {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
@@ -171,6 +219,13 @@ public class Main extends Application {
         return new Group(mainGrid);
     }
 
+    /**
+     * Tab 4 of the JavaFX frame
+     * Gaussian curve compare overall
+     * average per grade
+     *
+     * @return JavaFX group for tab4
+     */
     public static Group tab4() {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
@@ -219,6 +274,7 @@ public class Main extends Application {
     }
 
     /**
+     * Main function
      *
      * @param args : main args
      */

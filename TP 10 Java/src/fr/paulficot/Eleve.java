@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Eleve class that contains his name
+ * his marks and the optional topics he took
+ */
 public class Eleve {
 
     private transient Faker faker = new Faker(Locale.FRENCH);
@@ -14,6 +18,9 @@ public class Eleve {
     private List<Bulletin> bulletins;
     private final List<MATIERE> options;
 
+    /**
+     * Randomize the options the ELEVE will be doing
+     */
     public void genererOptions(){
         switch (faker.number().numberBetween(0, 5)) {
             case 1 -> options.add(MATIERE.ADVENG);
@@ -31,6 +38,13 @@ public class Eleve {
         }
     }
 
+    /**
+     * ELEVE constructor
+     * Generate a name with faker
+     * create arraylist for marks
+     * and create arraylist for optional
+     * topics and fill it
+     */
     public Eleve() {
         this.nom = faker.name().fullName();
         this.bulletins = new ArrayList<>();

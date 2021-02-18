@@ -7,8 +7,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Socket client that send data to the server
+ *
+ * @author Paul FICOT
+ * @version 1.0
+ */
 public class SocketClient {
 
+    /**
+     * Client parameters
+     */
     public static void clientMain()
     {
         String host = "127.0.0.1";
@@ -16,6 +25,12 @@ public class SocketClient {
         new SocketClient(host, port);
     }
 
+    /**
+     * Client for java socket
+     *
+     * @param host IP adress of the server
+     * @param port port to listen
+     */
     public SocketClient(String host, int port)
     {
         try

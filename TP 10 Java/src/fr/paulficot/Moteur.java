@@ -7,6 +7,14 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
+/**
+ * Contains every methods to create the schoolclasses
+ * students and create the tests
+ * Also process data for charts
+ *
+ * @author Paul FICOT
+ * @version 1.0
+ */
 public class Moteur {
 
     private static Moteur moteur_instance = null;
@@ -214,24 +222,29 @@ public class Moteur {
         }
     }
 
-    public static void classesStats(List<Classe> listeClasse) {
+    public static List<String> classesStats(List<Classe> listeClasse) {
         System.out.println("classesStats");
         Double min;
         Double max;
         Double avg= 0.0;
         Double med;
         DecimalFormat df = new DecimalFormat("0.00");
+        List<String> listStats = new ArrayList();
         //Classe
         for(Classe classe : listeClasse) {
             System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
+            listStats.add(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
             HashMap<MATIERE, List<Double>> stats = new HashMap<>();
             //Eleve
             for(Eleve eleve : classe.getListEleves()) {
+                listStats.add(eleve.getNom());
                 //Matiere
                 for(Bulletin bulletin : eleve.getBulletins()) {
                     if(bulletin.getNotes().isEmpty()) {
                         continue;
                     }
+                    System.out.println(bulletin.getMatiere().getNom());
+                    listStats.add(bulletin.getMatiere().getNom());
                     List<Double> dblList = new ArrayList<>();
                     for(Double note : bulletin.getNotes()) {
                         avg += note;
@@ -240,13 +253,18 @@ public class Moteur {
                     stats.put(bulletin.getMatiere(), dblList);
 
                     avg /= bulletin.getMatiere().getNbrEpreuve();
+
+                    listStats.add("Maximum: " + (Collections.max(dblList)));
+                    listStats.add("Minumum: " + Collections.min(dblList));
+                    listStats.add("Moyenne :" + df.format(avg));
+                    listStats.add("Mediane :" + df.format(mediane(dblList)));
                 }
+                listStats.add("------------------------------------------------");
             }
-            //System.out.println("Maximum: " + Collections.max(stats.values()));
-            //System.out.println("Minimum: " + Collections.min(dblList));
-            //System.out.println("Moyenne: " + df.format(avg));
-            //System.out.println("Mediane: " + df.format(mediane(dblList)));
+
         }
+
+        return listStats;
     }
 
     public static void variance() {

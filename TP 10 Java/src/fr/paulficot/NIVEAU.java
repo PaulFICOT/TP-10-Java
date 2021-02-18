@@ -1,5 +1,8 @@
 package fr.paulficot;
 
+/**
+ * Enum that contains every grades
+ */
 public enum NIVEAU {
     SIXIEME("6e"),
     CINQUIEME("5e"),

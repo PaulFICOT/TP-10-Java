@@ -4,18 +4,32 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Server that send data to a server
+ *
+ * @author Paul FICOT
+ * @version 1.0
+ */
 public class SocketServer extends Thread {
 
     public static final int PORT_NUMBER = 1234;
 
     protected Socket socket;
 
+    /**
+     * Constructor of the socket
+     *
+     * @param socket java socket
+     */
     private SocketServer(Socket socket) {
         this.socket = socket;
         System.out.println("New client connected from " + socket.getInetAddress().getHostAddress());
         start();
     }
 
+    /**
+     * Instantiate socket
+     */
     public void run() {
         InputStream in = null;
         OutputStream out = null;
@@ -48,6 +62,9 @@ public class SocketServer extends Thread {
         }
     }
 
+    /**
+     * Start the socket
+     */
     public static void serverMain() {
         System.out.println("SocketServer waiting client");
         ServerSocket server = null;
