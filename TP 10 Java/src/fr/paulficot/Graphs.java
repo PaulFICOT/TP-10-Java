@@ -38,13 +38,19 @@ public class Graphs {
         return graphs_instance;
     }
 
-    public static ListView setupListView() {
+    public static ListView setupListView0() {
         listView = new ListView();
 
         return listView;
     }
 
-    public static BarChart setupBarChart() {
+    public static ListView setupListView1() {
+        listView = new ListView();
+
+        return listView;
+    }
+
+    public static BarChart setupBarChart2() {
         //Define x axis
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Classes");
@@ -60,9 +66,9 @@ public class Graphs {
         return barChart;
     }
 
-    public static void updateBarChart(MATIERE matiere, NIVEAU niveau) {
+    public static void updateBarChart2(MATIERE matiere, NIVEAU niveau) {
         if(barChart == null) {
-            setupBarChart();
+            setupBarChart2();
         }
         barChart.getData().clear();
 
@@ -78,7 +84,7 @@ public class Graphs {
         barChart.getData().addAll(dataSeries);
     }
 
-    public static LineChart setupLineChart() {
+    public static LineChart setupLineChart3() {
         //Define x axis
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("x axis");
@@ -94,9 +100,9 @@ public class Graphs {
         return lineChart;
     }
 
-    public static void updateLineChart(NIVEAU niveau, MATIERE matiere, int epreuve) {
+    public static void updateLineChart3(NIVEAU niveau, MATIERE matiere, int epreuve) {
         if(lineChart == null) {
-            setupLineChart();
+            setupLineChart3();
         }
         lineChart.getData().clear();
 
@@ -106,7 +112,9 @@ public class Graphs {
         int x=0;
         for(Classe classe : Moteur.getInstance().getListeClasse()) {
             x+=5;
-            dataSeries.getData().add(new XYChart.Data(x, Moteur.tab2Gaussian(niveau, matiere, epreuve)));
+            for(LETTRE lettre : LETTRE.values()) {
+                dataSeries.getData().add(new XYChart.Data(x, Moteur.tab2Gaussian(niveau, lettre, matiere, epreuve)));
+            }
         }
         lineChart.getData().addAll(dataSeries);
     }

@@ -1,4 +1,4 @@
-package fr.paulficot;
+package fr.paulficot.Client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

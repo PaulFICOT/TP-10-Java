@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="math3">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/libs/math3" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/libs/math3" recursive="false" />
+  </library>
+</component>

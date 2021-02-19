@@ -1,4 +1,4 @@
-package fr.paulficot;
+package fr.paulficot.Server;
 
 import java.io.*;
 import java.net.ServerSocket;

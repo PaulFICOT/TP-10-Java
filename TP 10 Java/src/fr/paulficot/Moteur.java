@@ -2,6 +2,7 @@ package fr.paulficot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -26,6 +27,9 @@ public class Moteur {
     private static List<NIVEAU> listeNiveau;
     private static List<Classe> listeClasse;
 
+    /**
+     * Moteur constructor
+     */
     public Moteur() {
         this.listeMatiere = new ArrayList<>();
         this.listeLettre = new ArrayList<>();
@@ -33,6 +37,13 @@ public class Moteur {
         this.listeClasse = new ArrayList<>();
     }
 
+    /**
+     * Moteur singleton
+     * Instantiate a new moteur and return it
+     * if instance exists return it
+     *
+     * @return moteur instance
+     */
     public static Moteur getInstance() {
         if (moteur_instance == null)
             moteur_instance = new Moteur();
@@ -40,12 +51,19 @@ public class Moteur {
         return moteur_instance;
     }
 
+    /**
+     * Fullfill all the lists with enums content
+     */
     public void fillLists() {
         listeMatiere.addAll(Arrays.asList(MATIERE.values()));
         listeLettre.addAll(Arrays.asList(LETTRE.values()));
         listeNiveau.addAll(Arrays.asList(NIVEAU.values()));
     }
 
+    /**
+     * Create every schoolclasses and their
+     * structures, and create all the students
+     */
     public void createClasses() {
         System.out.println("createClasses");
         //Boucle niveau
@@ -64,6 +82,10 @@ public class Moteur {
         }
     }
 
+    /**
+     * Put marks into students
+     * bulletins for each test
+     */
     public void interroSurprise() {
         System.out.println("interroSurprise");
         Random random = new Random();
@@ -90,6 +112,9 @@ public class Moteur {
         }
     }
 
+    /**
+     * Display every marks of every student
+     */
     public void conseilDeClasse() {
         System.out.println("conseilDeClasse");
         //Classe
@@ -109,6 +134,11 @@ public class Moteur {
         }
     }
 
+    /**
+     * Display marks per schoolclass
+     *
+     * @param listeClasse list of every schoolclasses
+     */
     public static void notesClasses(List<Classe> listeClasse) {
         System.out.println("notes par classe");
         //Classe
@@ -135,6 +165,11 @@ public class Moteur {
         }
     }
 
+    /**
+     * Display marks per student
+     *
+     * @param listeClasse list of every schoolclasses
+     */
     public static void notesEleves(List<Classe> listeClasse) {
         System.out.println("notes par eleve");
         //Classe
@@ -156,6 +191,11 @@ public class Moteur {
         }
     }
 
+    /**
+     * Display marks per grade
+     *
+     * @param listeClasse list of every schoolclasses
+     */
     public static void notesNiveau(List<Classe> listeClasse) {
         System.out.println("notes par classe");
         for (NIVEAU niveau : NIVEAU.values()) {
@@ -187,6 +227,16 @@ public class Moteur {
         }
     }
 
+    /**
+     * Return a list of every marks per test
+     *
+     * @param niveau grade of the class who took the test
+     * @param lettre lettre of the class who took the test
+     * @param matiere topic of the test
+     * @param epreuve number of the test
+     *
+     * @return Marks that match arguments
+     */
     public static List<Double> getNotesEpreuves(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
         List<Double> listNotes = new ArrayList<>();
 
@@ -209,6 +259,12 @@ public class Moteur {
         return listNotes;
     }
 
+    /**
+     * Return the median for a list of double
+     *
+     * @param values list of doubles
+     * @return median for values
+     */
     public static double mediane(List<Double> values) {
         Collections.sort(values);
 
@@ -222,7 +278,44 @@ public class Moteur {
         }
     }
 
-    public static List<String> classesStats(List<Classe> listeClasse) {
+    /**
+     * List all marks per student
+     *
+     * @param listeClasse list of every schoolclasses
+     * @return a list of every marks per student
+     */
+    public static List<String> listeNotes0(List<Classe> listeClasse) {
+        List<String> listNotes = new ArrayList();
+
+        //Classe
+        for (Classe classe : listeClasse) {
+            listNotes.add(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
+            //Eleve
+            for (Eleve eleve : classe.getListEleves()) {
+                listNotes.add(eleve.getNom());
+                //Matiere
+                for (Bulletin bulletin : eleve.getBulletins()) {
+                    if(bulletin.getNotes().isEmpty()) {
+                        continue;
+                    }
+                    listNotes.add(bulletin.getMatiere().getNom());
+                    for (Double note : bulletin.getNotes()) {
+                        listNotes.add(note.toString());
+                    }
+                }
+            }
+            listNotes.add("---------------------------------------------------");
+        }
+        return listNotes;
+    }
+
+    /**
+     * Calculate statistics related to each student
+     *
+     * @param listeClasse list of every schoolclasses
+     * @return a list of every stats per students
+     */
+    public static List<String> classesStats1(List<Classe> listeClasse) {
         System.out.println("classesStats");
         Double min;
         Double max;
@@ -267,10 +360,14 @@ public class Moteur {
         return listStats;
     }
 
-    public static void variance() {
-
-    }
-
+    /**
+     * Return an average of marks per topic per schoolclass
+     *
+     * @param niveau grade of the class who took the test
+     * @param lettre lettre of the class who took the test
+     * @param matiere topic of the test
+     * @return Average per schoolclass
+     */
     public static Double tab1Moyenne(NIVEAU niveau, LETTRE lettre, MATIERE matiere) {
         double tmp = 0.0;
         int cpt = 0;
@@ -297,9 +394,72 @@ public class Moteur {
         return tmp/cpt;
     }
 
-    public static Double tab2Gaussian(NIVEAU niveau, MATIERE matiere, int epreuve) {
+    /**
+     * Return arguments for a normalized law
+     *
+     * @param niveau grade of the class who took the test
+     * @param lettre lettre of the class who took the test
+     * @param matiere topic of the test
+     * @param epreuve number of the test
+     *
+     * @return TODO
+     */
+    public static Double tab2Gaussian(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
+        double tmp = 0.0;
+        int cpt = 0;
+        int cpt2= 0;
+        double avg;
+        double diffAvg= 0.0;
+        //Classe
+        for (Classe classe : getListeClasse()) {
+            //Verifie le niveau et la lettre
+            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
+                continue;
+            }
+            //Eleve
+            for (Eleve eleve : classe.getListEleves()) {
+                //Bulletin
+                for (Bulletin bulletin : eleve.getBulletins()) {
+                    if (matiere != bulletin.getMatiere()) {
+                        continue;
+                    }
+                    for (Double note : bulletin.getNotes()) {
+                        tmp = tmp+note;
+                        cpt++;
+                    }
+                }
+            }
+        }
+        avg = tmp/cpt;
 
-        return null;
+        //Classe
+        for (Classe classe : getListeClasse()) {
+            //Verifie le niveau et la lettre
+            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
+                continue;
+            }
+            //Eleve
+            for (Eleve eleve : classe.getListEleves()) {
+                //Bulletin
+                for (Bulletin bulletin : eleve.getBulletins()) {
+                    if (matiere != bulletin.getMatiere()) {
+                        continue;
+                    }
+                    for (Double note : bulletin.getNotes()) {
+                        diffAvg += note - avg;
+                        cpt2++;
+                    }
+                }
+            }
+        }
+
+        return normalizedLaw(avg, diffAvg);
+    }
+
+    public static double normalizedLaw(double avg, double diffAvg) {
+        NormalDistribution normalDistribution = new NormalDistribution(avg, diffAvg);
+
+        return normalDistribution.density(avg);
     }
 
     public static List<MATIERE> getListeMatiere() {
@@ -334,6 +494,10 @@ public class Moteur {
         Moteur.listeClasse = listeClasse;
     }
 
+    /**
+     * Generate a JSON file that
+     * contains every students and his marks
+     */
     public void json() {
         System.out.println("JSON");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -347,6 +511,10 @@ public class Moteur {
         }
     }
 
+    /**
+     * Run every method to
+     * setup the project
+     */
     public void generer() {
         fillLists();
         createClasses();

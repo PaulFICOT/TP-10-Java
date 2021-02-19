@@ -35,18 +35,21 @@ public class Main extends Application {
             Tab tab2 = new Tab("2");
             Tab tab3 = new Tab("3");
             Tab tab4 = new Tab("4");
+            Tab tab5 = new Tab("5");
 
             tabPane.getTabs().add(tab0);
             tabPane.getTabs().add(tab1);
             tabPane.getTabs().add(tab2);
             tabPane.getTabs().add(tab3);
             tabPane.getTabs().add(tab4);
+            tabPane.getTabs().add(tab5);
 
             tab0.setContent(tab0());
             tab1.setContent(tab1());
             tab2.setContent(tab2());
             tab3.setContent(tab3());
             tab4.setContent(tab4());
+            tab5.setContent(tab5());
 
             Scene scene = new Scene(tabPane);
             primaryStage.setTitle("TP 10 Java PFICOT");
@@ -60,7 +63,8 @@ public class Main extends Application {
 
     /**
      * Tab 0 of the JavaFX frame
-     * contains list of stats per student
+     * contains list of every marks
+     * per student
      *
      * @return JavaFX group for tab0
      */
@@ -68,11 +72,11 @@ public class Main extends Application {
         Graphs.getInstance();
         GridPane mainGrid = new GridPane();
 
-        ListView tab0List = Graphs.setupListView();
+        ListView tab0List = Graphs.setupListView0();
 
         mainGrid.add(tab0List, 0, 1, 1, 1);
 
-        for(String line : Moteur.classesStats(Moteur.getListeClasse())) {
+        for(String line : Moteur.listeNotes0(Moteur.getListeClasse())) {
             tab0List.getItems().add(line);
         }
 
@@ -81,11 +85,32 @@ public class Main extends Application {
 
     /**
      * Tab 1 of the JavaFX frame
+     * contains list of stats per student
+     *
+     * @return JavaFX group for tab0
+     */
+    public static Group tab1() {
+        Graphs.getInstance();
+        GridPane mainGrid = new GridPane();
+
+        ListView tab0List = Graphs.setupListView1();
+
+        mainGrid.add(tab0List, 0, 1, 1, 1);
+
+        for(String line : Moteur.classesStats1(Moteur.getListeClasse())) {
+            tab0List.getItems().add(line);
+        }
+
+        return new Group(mainGrid);
+    }
+
+    /**
+     * Tab 2 of the JavaFX frame
      * Barchar average per class per topic
      *
      * @return JavaFX group for tab1
      */
-    public static Group tab1() {
+    public static Group tab2() {
         Graphs.getInstance();
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
@@ -99,7 +124,7 @@ public class Main extends Application {
             tab1Combo2.getItems().add(niveau);
         }
 
-        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateBarChart((MATIERE) tab1Combo1.getValue(), (NIVEAU) tab1Combo2.getValue());
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateBarChart2((MATIERE) tab1Combo1.getValue(), (NIVEAU) tab1Combo2.getValue());
 
         tab1Combo1.getSelectionModel().selectFirst();
         tab1Combo2.getSelectionModel().selectFirst();
@@ -112,19 +137,19 @@ public class Main extends Application {
 
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
-        BarChart barChart = Graphs.setupBarChart();
+        BarChart barChart = Graphs.setupBarChart2();
         mainGrid.add(barChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
     }
 
     /**
-     * Tab 2 of the JavaFX frame
+     * Tab 3 of the JavaFX frame
      * Gaussian curve of the results for a test
      *
      * @return JavaFX group for tab2
      */
-    public static Group tab2() {
+    public static Group tab3() {
         Graphs.getInstance();
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
@@ -143,22 +168,24 @@ public class Main extends Application {
             tab2Combo3.getItems().add(epreuve);
         }
 
-        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateLineChart((NIVEAU) tab2Combo1.getValue(), (MATIERE) tab2Combo2.getValue(), (int) tab2Combo3.getValue());
+        ChangeListener changeListener = null;
+        for(LETTRE lettre : LETTRE.values()) {
+            changeListener = (observableValue, o, t1) -> Graphs.updateLineChart3((NIVEAU) tab2Combo1.getValue(), (MATIERE) tab2Combo2.getValue(), (int) tab2Combo3.getValue());
+        }
+            tab2Combo1.getSelectionModel().selectFirst();
+            tab2Combo2.getSelectionModel().selectFirst();
+            tab2Combo3.getSelectionModel().selectFirst();
 
-        tab2Combo1.getSelectionModel().selectFirst();
-        tab2Combo2.getSelectionModel().selectFirst();
-        tab2Combo3.getSelectionModel().selectFirst();
+            tab2Combo1.valueProperty().addListener(changeListener);
+            tab2Combo2.valueProperty().addListener(changeListener);
+            tab2Combo3.valueProperty().addListener(changeListener);
 
-        tab2Combo1.valueProperty().addListener(changeListener);
-        tab2Combo2.valueProperty().addListener(changeListener);
-        tab2Combo3.valueProperty().addListener(changeListener);
-
-        sousGrid.add(tab2Combo1, 0, 0, 1, 1);
-        sousGrid.add(tab2Combo2, 1, 0, 1, 1);
-        sousGrid.add(tab2Combo3, 2, 0, 1, 1);
-        mainGrid.add(sousGrid, 0, 0, 1, 1);
-
-        LineChart lineChart = Graphs.setupLineChart();
+            sousGrid.add(tab2Combo1, 0, 0, 1, 1);
+            sousGrid.add(tab2Combo2, 1, 0, 1, 1);
+            sousGrid.add(tab2Combo3, 2, 0, 1, 1);
+            mainGrid.add(sousGrid, 0, 0, 1, 1);
+            
+        LineChart lineChart = Graphs.setupLineChart3();
 
         mainGrid.add(lineChart, 0, 1, 1, 1);
 
@@ -166,13 +193,13 @@ public class Main extends Application {
     }
 
     /**
-     * Tab 3 of the JavaFX frame
+     * Tab 4 of the JavaFX frame
      * Gaussian curve results of a
      * test per class per topic
      *
      * @return JavaFX group for tab3
      */
-    public static Group tab3() {
+    public static Group tab4() {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
@@ -220,13 +247,13 @@ public class Main extends Application {
     }
 
     /**
-     * Tab 4 of the JavaFX frame
+     * Tab 5 of the JavaFX frame
      * Gaussian curve compare overall
      * average per grade
      *
      * @return JavaFX group for tab4
      */
-    public static Group tab4() {
+    public static Group tab5() {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
