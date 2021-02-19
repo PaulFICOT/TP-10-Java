@@ -1,5 +1,9 @@
 package fr.paulficot.Client;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import fr.paulficot.Moteur;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,6 +46,7 @@ public class SocketClient {
             Socket echoSocket = null;
             PrintWriter out = null;
             BufferedReader in = null;
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
             try
             {
@@ -59,10 +64,9 @@ public class SocketClient {
                 System.err.println("Connexion closed");
                 System.exit(1);
             }
-            out.println("tutu");
-            out.println("tati");
-            out.println("Coucou");
+            out.println("SERVER");
             String line = in.readLine();
+            out.write(Integer.parseInt(gson.toJson(Moteur.getListeClasse())));
 
             System.out.println("Message received from server: "+line);
 

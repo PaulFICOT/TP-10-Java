@@ -115,25 +115,25 @@ public class Main extends Application {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
-        ComboBox tab1Combo1 = new ComboBox();
+        ComboBox tab2Combo1 = new ComboBox();
         for(MATIERE matiere : MATIERE.values()) {
-            tab1Combo1.getItems().add(matiere);
+            tab2Combo1.getItems().add(matiere);
         }
-        ComboBox tab1Combo2 = new ComboBox();
+        ComboBox tab2Combo2 = new ComboBox();
         for(NIVEAU niveau : NIVEAU.values()) {
-            tab1Combo2.getItems().add(niveau);
+            tab2Combo2.getItems().add(niveau);
         }
 
-        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateBarChart2((MATIERE) tab1Combo1.getValue(), (NIVEAU) tab1Combo2.getValue());
+        tab2Combo1.getSelectionModel().selectFirst();
+        tab2Combo2.getSelectionModel().selectFirst();
 
-        tab1Combo1.getSelectionModel().selectFirst();
-        tab1Combo2.getSelectionModel().selectFirst();
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updateBarChart2((MATIERE) tab2Combo1.getValue(), (NIVEAU) tab2Combo2.getValue());
 
-        tab1Combo1.valueProperty().addListener(changeListener);
-        tab1Combo2.valueProperty().addListener(changeListener);
+        tab2Combo1.valueProperty().addListener(changeListener);
+        tab2Combo2.valueProperty().addListener(changeListener);
 
-        sousGrid.add(tab1Combo1, 0, 0, 1, 1);
-        sousGrid.add(tab1Combo2, 1, 0, 1, 1);
+        sousGrid.add(tab2Combo1, 0, 0, 1, 1);
+        sousGrid.add(tab2Combo2, 1, 0, 1, 1);
 
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
@@ -203,45 +203,30 @@ public class Main extends Application {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
-        ComboBox tab3Combo1 = new ComboBox();
-        ComboBox tab3Combo2 = new ComboBox();
-        ComboBox tab3Combo3 = new ComboBox();
+        ComboBox tab4Combo1 = new ComboBox();
+        ComboBox tab4Combo2 = new ComboBox();
 
         for (NIVEAU niveau : NIVEAU.values()) {
-            tab3Combo1.getItems().add(niveau);
+            tab4Combo1.getItems().add(niveau);
         }
         for(MATIERE matiere : MATIERE.values()) {
-            tab3Combo2.getItems().add(matiere.getNom());
-        }
-        for(MATIERE matiere : MATIERE.values()) {
-            tab3Combo3.getItems().add(matiere.getNbrEpreuve());
+            tab4Combo2.getItems().add(matiere);
         }
 
-        sousGrid.add(tab3Combo1, 0, 0, 1, 1);
-        sousGrid.add(tab3Combo2, 1, 0, 1, 1);
-        sousGrid.add(tab3Combo3, 2, 0, 1, 1);
+        tab4Combo1.getSelectionModel().selectFirst();
+        tab4Combo2.getSelectionModel().selectFirst();
+
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updatePieChart4((NIVEAU) tab4Combo1.getValue(), (MATIERE) tab4Combo2.getValue());
+
+        tab4Combo1.valueProperty().addListener(changeListener);
+        tab4Combo2.valueProperty().addListener(changeListener);
+
+        sousGrid.add(tab4Combo1, 0, 0, 1, 1);
+        sousGrid.add(tab4Combo2, 1, 0, 1, 1);
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("x axis");
-
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("y axis");
-
-        LineChart lineChart = new LineChart(xAxis, yAxis);
-
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("2014");
-
-        dataSeries1.getData().add(new XYChart.Data( 1, 567));
-        dataSeries1.getData().add(new XYChart.Data( 5, 612));
-        dataSeries1.getData().add(new XYChart.Data(10, 800));
-        dataSeries1.getData().add(new XYChart.Data(20, 780));
-        dataSeries1.getData().add(new XYChart.Data(40, 810));
-        dataSeries1.getData().add(new XYChart.Data(80, 850));
-
-        lineChart.getData().add(dataSeries1);
-        mainGrid.add(lineChart, 0, 1, 1, 1);
+        PieChart pieChart = Graphs.setupPieChart4();
+        mainGrid.add(pieChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
     }
@@ -257,45 +242,23 @@ public class Main extends Application {
         GridPane mainGrid = new GridPane();
         GridPane sousGrid = new GridPane();
 
-        ComboBox tab4Combo1 = new ComboBox();
-        ComboBox tab4Combo2 = new ComboBox();
-        ComboBox tab4Combo3 = new ComboBox();
+        ComboBox tab5Combo1 = new ComboBox();
 
         for (NIVEAU niveau : NIVEAU.values()) {
-            tab4Combo1.getItems().add(niveau);
-        }
-        for(MATIERE matiere : MATIERE.values()) {
-            tab4Combo2.getItems().add(matiere.getNom());
-        }
-        for(MATIERE matiere : MATIERE.values()) {
-            tab4Combo3.getItems().add(matiere.getNbrEpreuve());
+            tab5Combo1.getItems().add(niveau);
         }
 
-        sousGrid.add(tab4Combo1, 0, 0, 1, 1);
-        sousGrid.add(tab4Combo2, 1, 0, 1, 1);
-        sousGrid.add(tab4Combo3, 2, 0, 1, 1);
+        tab5Combo1.getSelectionModel().selectFirst();
+
+        ChangeListener changeListener = (observableValue, o, t1) -> Graphs.updatePieChart5((NIVEAU) tab5Combo1.getValue());
+
+        tab5Combo1.valueProperty().addListener(changeListener);
+
+        sousGrid.add(tab5Combo1, 0, 0, 1, 1);
         mainGrid.add(sousGrid, 0, 0, 1, 1);
 
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("x axis");
-
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("y axis");
-
-        LineChart lineChart = new LineChart(xAxis, yAxis);
-
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("2014");
-
-        dataSeries1.getData().add(new XYChart.Data( 1, 567));
-        dataSeries1.getData().add(new XYChart.Data( 5, 612));
-        dataSeries1.getData().add(new XYChart.Data(10, 800));
-        dataSeries1.getData().add(new XYChart.Data(20, 780));
-        dataSeries1.getData().add(new XYChart.Data(40, 810));
-        dataSeries1.getData().add(new XYChart.Data(80, 850));
-
-        lineChart.getData().add(dataSeries1);
-        mainGrid.add(lineChart, 0, 1, 1, 1);
+        PieChart pieChart = Graphs.setupPieChart5();
+        mainGrid.add(pieChart, 0, 1, 1, 1);
 
         return new Group(mainGrid);
     }

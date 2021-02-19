@@ -1,5 +1,9 @@
 package fr.paulficot.Server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import fr.paulficot.Moteur;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,6 +37,8 @@ public class SocketServer extends Thread {
     public void run() {
         InputStream in = null;
         OutputStream out = null;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
         try {
             in = socket.getInputStream();
             out = socket.getOutputStream();
@@ -41,10 +47,9 @@ public class SocketServer extends Thread {
             while ((request = br.readLine()) != null)
             {
                 System.out.println("Message received from server:" + request);
-                if( request.equals("Coucou") )
+                if( request.equals("SERVER") )
                 {
-                    String msgReturn = "Bonjour\n";
-                    out.write(msgReturn.getBytes());
+                    out.write(Integer.parseInt(request));
                     System.exit(1);
                 }
             }
@@ -63,7 +68,7 @@ public class SocketServer extends Thread {
     }
 
     /**
-     * Start the socket
+     * Start the server
      */
     public static void serverMain() {
         System.out.println("SocketServer waiting client");

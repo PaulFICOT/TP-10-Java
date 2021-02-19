@@ -325,7 +325,6 @@ public class Moteur {
         List<String> listStats = new ArrayList();
         //Classe
         for(Classe classe : listeClasse) {
-            System.out.println(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
             listStats.add(classe.getNiveau().getAbreviation() + " " + classe.getLettre().toString());
             HashMap<MATIERE, List<Double>> stats = new HashMap<>();
             //Eleve
@@ -336,7 +335,6 @@ public class Moteur {
                     if(bulletin.getNotes().isEmpty()) {
                         continue;
                     }
-                    System.out.println(bulletin.getMatiere().getNom());
                     listStats.add(bulletin.getMatiere().getNom());
                     List<Double> dblList = new ArrayList<>();
                     for(Double note : bulletin.getNotes()) {
@@ -402,7 +400,7 @@ public class Moteur {
      * @param matiere topic of the test
      * @param epreuve number of the test
      *
-     * @return TODO
+     * @return average mark and average deviation
      */
     public static Double tab2Gaussian(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
         double tmp = 0.0;
@@ -456,6 +454,113 @@ public class Moteur {
         return normalizedLaw(avg, diffAvg);
     }
 
+    /**
+     * Average grade per level
+     * per topic
+     *
+     * @param niveau Grade
+     * @param matiere Tests topic
+     * @return average grade for a niveau level
+     * and a select topic
+     */
+    public static HashMap<String, Integer> tab4AvgPerTopicPerGrade(NIVEAU niveau, MATIERE matiere) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("Très bien", 0);
+        hashMap.put("Bien", 0);
+        hashMap.put("Assez bien", 0);
+        hashMap.put("Passable", 0);
+        hashMap.put("Insuffisant", 0);
+
+        //Classe
+        for(Classe classe : listeClasse) {
+            if(niveau != classe.getNiveau()) {
+                continue;
+            }
+            //Eleve
+            for(Eleve eleve : classe.getListEleves()) {
+                int cpt = 0;
+                double avg = 0.0;
+                //Bulletin
+                for(Bulletin bulletin : eleve.getBulletins()) {
+                    if(bulletin.getMatiere() != matiere) {
+                        continue;
+                    }
+                    //Test result
+                    for(Double note : bulletin.getNotes()) {
+                        cpt++;
+                        avg = avg+note;
+                    }
+                }
+                if(avg/cpt > 16) {
+                    hashMap.put("Très bien", hashMap.get("Très bien") + 1);
+                } else if(avg/cpt > 14) {
+                    hashMap.put("Bien", hashMap.get("Bien") + 1);
+                } else if(avg/cpt > 12) {
+                    hashMap.put("Assez bien", hashMap.get("Assez bien") + 1);
+                } else if(avg/cpt > 10) {
+                    hashMap.put("Passable", hashMap.get("Passable") + 1);
+                } else {
+                    hashMap.put("Insuffisant", hashMap.get("Insuffisant") + 1);
+                }
+            }
+        }
+        return hashMap;
+    }
+
+    /**
+     * Average grade per level
+     *
+     * @param niveau Grade
+     * @return average grade for niveau level
+     */
+    public static HashMap<String, Integer> tab5AvgPerGrade(NIVEAU niveau) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("Très bien", 0);
+        hashMap.put("Bien", 0);
+        hashMap.put("Assez bien", 0);
+        hashMap.put("Passable", 0);
+        hashMap.put("Insuffisant", 0);
+
+        //Classe
+        for(Classe classe : listeClasse) {
+            if(niveau != classe.getNiveau()) {
+                continue;
+            }
+            //Eleve
+            for(Eleve eleve : classe.getListEleves()) {
+                int cpt = 0;
+                double avg = 0.0;
+                //Bulletin
+                for(Bulletin bulletin : eleve.getBulletins()) {
+                    //Test result
+                    for(Double note : bulletin.getNotes()) {
+                        cpt++;
+                        avg = avg+note;
+                    }
+                }
+                if(avg/cpt > 16) {
+                    hashMap.put("Très bien", hashMap.get("Très bien") + 1);
+                } else if(avg/cpt > 14) {
+                    hashMap.put("Bien", hashMap.get("Bien") + 1);
+                } else if(avg/cpt > 12) {
+                    hashMap.put("Assez bien", hashMap.get("Assez bien") + 1);
+                } else if(avg/cpt > 10) {
+                    hashMap.put("Passable", hashMap.get("Passable") + 1);
+                } else {
+                    hashMap.put("Insuffisant", hashMap.get("Insuffisant") + 1);
+                }
+            }
+        }
+        return hashMap;
+    }
+
+    /**
+     * Calculate normalized Law
+     *
+     * @param avg average of an arraylist
+     * @param diffAvg average deviation
+     * @return normalized value for x
+     */
     public static double normalizedLaw(double avg, double diffAvg) {
         NormalDistribution normalDistribution = new NormalDistribution(avg, diffAvg);
 
@@ -519,7 +624,6 @@ public class Moteur {
         fillLists();
         createClasses();
         interroSurprise();
-        //conseilDeClasse();
         json();
     }
 }

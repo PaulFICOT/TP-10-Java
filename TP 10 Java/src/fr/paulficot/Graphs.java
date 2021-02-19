@@ -3,6 +3,9 @@ package fr.paulficot;
 import javafx.scene.chart.*;
 import javafx.scene.control.ListView;
 
+import javax.naming.ldap.HasControls;
+import java.util.HashMap;
+
 /**
  * Setup and refresh every JavaFX
  * datas in charts
@@ -17,6 +20,8 @@ public class Graphs {
     private static ListView listView;
     private static BarChart barChart;
     private static LineChart lineChart;
+    private static PieChart pieChart4;
+    private static PieChart pieChart5;
 
     /**
      * Graph object constructor
@@ -38,6 +43,11 @@ public class Graphs {
         return graphs_instance;
     }
 
+    /**
+     * Setup the listview of tab0
+     *
+     * @return str of all students and marks
+     */
     public static ListView setupListView0() {
         listView = new ListView();
 
@@ -66,6 +76,34 @@ public class Graphs {
         return barChart;
     }
 
+    public static LineChart setupLineChart3() {
+        //Define x axis
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel("x axis");
+        xAxis.setAnimated(false);
+
+        //Define y axis
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("y axis");
+        yAxis.setAnimated(false);
+
+        lineChart = new LineChart(xAxis, yAxis);
+
+        return lineChart;
+    }
+
+    public static PieChart setupPieChart4() {
+        pieChart4 = new PieChart();
+
+        return pieChart4;
+    }
+
+    public static PieChart setupPieChart5() {
+        pieChart5 = new PieChart();
+
+        return pieChart5;
+    }
+
     public static void updateBarChart2(MATIERE matiere, NIVEAU niveau) {
         if(barChart == null) {
             setupBarChart2();
@@ -82,22 +120,6 @@ public class Graphs {
             break;
         }
         barChart.getData().addAll(dataSeries);
-    }
-
-    public static LineChart setupLineChart3() {
-        //Define x axis
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("x axis");
-        xAxis.setAnimated(false);
-
-        //Define y axis
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("y axis");
-        yAxis.setAnimated(false);
-
-        lineChart = new LineChart(xAxis, yAxis);
-
-        return lineChart;
     }
 
     public static void updateLineChart3(NIVEAU niveau, MATIERE matiere, int epreuve) {
@@ -117,5 +139,33 @@ public class Graphs {
             }
         }
         lineChart.getData().addAll(dataSeries);
+    }
+
+    public static void updatePieChart4(NIVEAU niveau, MATIERE matiere) {
+        if(pieChart4 == null) {
+            setupPieChart4();
+        }
+        pieChart4.getData().clear();
+
+        HashMap<String, Integer> hashMap = Moteur.tab4AvgPerTopicPerGrade(niveau, matiere);
+
+        for(String key : hashMap.keySet()) {
+            PieChart.Data slice = new PieChart.Data(key + "= " + hashMap.get(key), hashMap.get(key));
+            pieChart4.getData().add(slice);
+        }
+    }
+
+    public static void updatePieChart5(NIVEAU niveau) {
+        if(pieChart5 == null) {
+            setupPieChart5();
+        }
+        pieChart5.getData().clear();
+
+        HashMap<String, Integer> hashMap = Moteur.tab5AvgPerGrade(niveau);
+
+        for(String key : hashMap.keySet()) {
+            PieChart.Data slice = new PieChart.Data(key + "= " + hashMap.get(key), hashMap.get(key));
+            pieChart5.getData().add(slice);
+        }
     }
 }
