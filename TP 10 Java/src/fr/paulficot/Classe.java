@@ -3,7 +3,12 @@ package fr.paulficot;
 import java.util.*;
 
 /**
+ * A classe is a list
+ * of students, a grade
+ * and a letter
  *
+ * @author Paul FICOT
+ * @version 1.0
  */
 public class Classe {
 
@@ -12,9 +17,8 @@ public class Classe {
     private List<Eleve> listEleves;
 
     /**
-     *
-     * @param niveau : Niveau de la classe (6e, 5e, etc.)
-     * @param lettre : Lettre permettant d'identifier chaque classe d'un même niveau
+     * @param niveau : Grade of the schoolclass (6e, 5e, etc.)
+     * @param lettre : Allow you to identity a schoolclass
      */
     public Classe(NIVEAU niveau, LETTRE lettre) {
         this.niveau = niveau;

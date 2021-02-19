@@ -3,6 +3,13 @@ package fr.paulficot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A bulletin is a topic
+ * and a list of marks
+ *
+ * @author Paul FICOT
+ * @version 1.0
+ */
 public class Bulletin {
     private MATIERE matiere;
     private List<Double> notes;

@@ -54,12 +54,22 @@ public class Graphs {
         return listView;
     }
 
+    /**
+     * Setup the listview of tab1
+     *
+     * @return str of all students and average
+     */
     public static ListView setupListView1() {
         listView = new ListView();
 
         return listView;
     }
 
+    /**
+     * Setup the barChart of tab2
+     *
+     * @return chart of average per class per topic per test
+     */
     public static BarChart setupBarChart2() {
         //Define x axis
         CategoryAxis xAxis = new CategoryAxis();
@@ -76,6 +86,11 @@ public class Graphs {
         return barChart;
     }
 
+    /**
+     * Setup the lineChart of tab3
+     *
+     * @return lineChart with a gaussian of average marks
+     */
     public static LineChart setupLineChart3() {
         //Define x axis
         NumberAxis xAxis = new NumberAxis();
@@ -92,18 +107,34 @@ public class Graphs {
         return lineChart;
     }
 
+    /**
+     * Setup the pieChart of tab4
+     *
+     * @return pie with repartition of marks per topic per grade
+     */
     public static PieChart setupPieChart4() {
         pieChart4 = new PieChart();
 
         return pieChart4;
     }
 
+    /**
+     * Setup the pieChart of tab5
+     *
+     * @return pie with repartition of marksper grade
+     */
     public static PieChart setupPieChart5() {
         pieChart5 = new PieChart();
 
         return pieChart5;
     }
 
+    /**
+     * Update content of barChart2
+     *
+     * @param matiere topic
+     * @param niveau grade
+     */
     public static void updateBarChart2(MATIERE matiere, NIVEAU niveau) {
         if(barChart == null) {
             setupBarChart2();
@@ -122,6 +153,13 @@ public class Graphs {
         barChart.getData().addAll(dataSeries);
     }
 
+    /**
+     * Update content of lineChart3
+     *
+     * @param niveau grade
+     * @param matiere topic
+     * @param epreuve test number
+     */
     public static void updateLineChart3(NIVEAU niveau, MATIERE matiere, int epreuve) {
         if(lineChart == null) {
             setupLineChart3();
@@ -141,6 +179,12 @@ public class Graphs {
         lineChart.getData().addAll(dataSeries);
     }
 
+    /**
+     * Update content of pieChart4
+     *
+     * @param niveau grade
+     * @param matiere topic
+     */
     public static void updatePieChart4(NIVEAU niveau, MATIERE matiere) {
         if(pieChart4 == null) {
             setupPieChart4();
@@ -155,6 +199,11 @@ public class Graphs {
         }
     }
 
+    /**
+     * Update content of pieChart5
+     *
+     * @param niveau grade
+     */
     public static void updatePieChart5(NIVEAU niveau) {
         if(pieChart5 == null) {
             setupPieChart5();
