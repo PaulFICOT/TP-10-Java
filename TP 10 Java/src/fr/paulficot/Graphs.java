@@ -4,7 +4,9 @@ import javafx.scene.chart.*;
 import javafx.scene.control.ListView;
 
 import javax.naming.ldap.HasControls;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Setup and refresh every JavaFX
@@ -166,17 +168,19 @@ public class Graphs {
         }
         lineChart.getData().clear();
 
-        XYChart.Series dataSeries = new XYChart.Series();
-        dataSeries.setName("Niveau | Matiere | Epreuve");
-
-        int x=0;
-        for(Classe classe : Moteur.getInstance().getListeClasse()) {
-            x+=5;
-            for(LETTRE lettre : LETTRE.values()) {
-                dataSeries.getData().add(new XYChart.Data(x, Moteur.tab2Gaussian(niveau, lettre, matiere, epreuve)));
+        for(Classe classe : Moteur.getListeClasse()) {
+            if(niveau != classe.getNiveau()) {
+                continue;
             }
+            XYChart.Series dataSeries = new XYChart.Series();
+            dataSeries.setName(classe.toString());
+            List<Integer> list = Moteur.tab3AvgPerTopicPerGradePerTest(niveau, classe.getLettre() ,matiere , epreuve);
+            for(int i=0; i < 21; i++) {
+                dataSeries.getData().add(new XYChart.Data(i, list.get(i)));
+            }
+            lineChart.getData().add(dataSeries);
         }
-        lineChart.getData().addAll(dataSeries);
+
     }
 
     /**

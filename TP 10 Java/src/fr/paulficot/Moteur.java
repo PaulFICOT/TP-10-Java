@@ -2,7 +2,6 @@ package fr.paulficot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -393,65 +392,46 @@ public class Moteur {
     }
 
     /**
-     * Return arguments for a normalized law
+     * Return the grades for a test from a schoolclass
      *
      * @param niveau grade of the class who took the test
      * @param lettre lettre of the class who took the test
      * @param matiere topic of the test
      * @param epreuve number of the test
      *
-     * @return average mark and average deviation
+     * @return number of occurences of a grade per topic per test per class
      */
-    public static Double tab2Gaussian(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
-        double tmp = 0.0;
-        int cpt = 0;
-        int cpt2= 0;
-        double avg;
-        double diffAvg= 0.0;
+    public static List<Integer> tab3AvgPerTopicPerGradePerTest(NIVEAU niveau, LETTRE lettre, MATIERE matiere, int epreuve) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+
+        for(int i=0; i < 21; i++) {
+            list.add(0);
+        }
+
         //Classe
-        for (Classe classe : getListeClasse()) {
-            //Verifie le niveau et la lettre
-            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
+        for(Classe classe : listeClasse) {
+            if(niveau != classe.getNiveau() || lettre != classe.getLettre()) {
                 continue;
             }
+            double note;
             //Eleve
-            for (Eleve eleve : classe.getListEleves()) {
+            for(Eleve eleve : classe.getListEleves()) {
                 //Bulletin
-                for (Bulletin bulletin : eleve.getBulletins()) {
-                    if (matiere != bulletin.getMatiere()) {
+                for(Bulletin bulletin : eleve.getBulletins()) {
+                    if(bulletin.getMatiere() != matiere) {
                         continue;
                     }
-                    for (Double note : bulletin.getNotes()) {
-                        tmp = tmp+note;
-                        cpt++;
+                    if(epreuve > bulletin.getMatiere().getNbrEpreuve()) {
+                        continue;
                     }
+                    //Test result
+                    note = bulletin.getNotes().get(epreuve);
+                    list.set((int) note, +1);
                 }
             }
         }
-        avg = tmp/cpt;
-
-        //Classe
-        for (Classe classe : getListeClasse()) {
-            //Verifie le niveau et la lettre
-            if (niveau != classe.getNiveau() || lettre != classe.getLettre()) {
-                continue;
-            }
-            //Eleve
-            for (Eleve eleve : classe.getListEleves()) {
-                //Bulletin
-                for (Bulletin bulletin : eleve.getBulletins()) {
-                    if (matiere != bulletin.getMatiere()) {
-                        continue;
-                    }
-                    for (Double note : bulletin.getNotes()) {
-                        diffAvg += note - avg;
-                        cpt2++;
-                    }
-                }
-            }
-        }
-
-        return normalizedLaw(avg, diffAvg);
+        return list;
     }
 
     /**
@@ -552,19 +532,6 @@ public class Moteur {
             }
         }
         return hashMap;
-    }
-
-    /**
-     * Calculate normalized Law
-     *
-     * @param avg average of an arraylist
-     * @param diffAvg average deviation
-     * @return normalized value for x
-     */
-    public static double normalizedLaw(double avg, double diffAvg) {
-        NormalDistribution normalDistribution = new NormalDistribution(avg, diffAvg);
-
-        return normalDistribution.density(avg);
     }
 
     public static List<MATIERE> getListeMatiere() {

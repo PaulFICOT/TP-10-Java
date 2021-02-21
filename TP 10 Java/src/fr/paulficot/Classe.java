@@ -49,4 +49,9 @@ public class Classe {
     public void setListEleves(List<Eleve> listEleves) {
         this.listEleves = listEleves;
     }
+
+    @Override
+    public String toString() {
+        return niveau.getAbreviation() + lettre;
+    }
 }
